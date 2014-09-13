@@ -1,0 +1,35 @@
+In this chapter we have tried to applied some modifications in the implementation of the PRM to make the planner more effective. 
+The modifications that we have decided to implement are listed below.
+\begin{enumerate}
+\item Find difficult regions
+\end{enumerate}
+
+\section{Find difficult regions}
+We try to implement two strategies to improve to find difficult regions, which are listed below.
+\begin{enumerate}
+\item This described in the paper. Based on the success and fail ratio to connect to nodes  
+\item Based on most non connected nodes from different components in a certain distance
+\end{enumerate}
+
+\subsection{Based on the success and fail ratio to connect to nodes }
+All nodes have been weighted to achieve a heuristic measure of the difficulty of region around that node. The weighting is based on the success and fail ratio to connect to this node. w(c) equation is listed below, notice that the sum all w(c) are normalize to 1. f(c) is the number of failures to connect and n(c) is the total tries to connect.
+\begin{align*}
+	r_f(c) = \frac{f(c)}{n(c) + 1}	 \\
+	w(c) = \frac{r_f(c)}{\sum_{a \in N} r_f(a) } 
+\end{align*}
+
+The vector with all the nodes will therefore be sorted by the value of w(c), so the highest value indicating most difficult region.
+Randombouncewalk will then be performed after the w(c) list.
+
+\subsection{Based on most non connected nodes from different components in a certain distance}
+The principle of this strategy is shown in figure \ref{fig:method2}. A node is investigating in its own area depicted of the maximum distance to neighbours. If it finds nodes from another component in this area, it add w(c) by 1. The figure shows node1, which have has two reachable nodes from another components. Node2 has just one reachable node. Therefore node1 will be executed first.
+During to the list of w(c) sorted by the highest value of nodes from another components in a specified arena.
+
+\begin{figure}[h]
+ \centering
+ \includegraphics[scale=0.4]{images/method2.pdf}
+ \caption{Based on most non connected nodes from different components in a certain distance}
+ \label{fig:method2}
+\end{figure}
+
+

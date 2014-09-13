@@ -1,0 +1,70 @@
+\input{preamble}
+\begin{document}
+
+
+%\input{front_page}
+
+\begin{titlingpage}
+
+%\thispagestyle{empty}
+\begin{center}
+\vspace*{5\onelineskip}
+\vspace*{5\onelineskip}
+%\vspace*{5\onelineskip}
+{ \baselineskip=24pt
+{\Huge \textsc{Advanced Robotics}}\\
+\vspace*{2\onelineskip}
+{\large \textsc{Project 3}}\\
+{\large \textsc{Planning of safe motions
+}}\\
+%{\normalfont{Group 5}}\\
+\vspace*{4\onelineskip}
+\large\textsc{Jacob Buch}\\
+%\large\textsc{Mats Larsen}\\
+\large\textsc{Mats Larsen}\par}
+\vfill
+\vfill
+
+\vspace*{2\onelineskip}
+\normalfont{Deadline:} \quad \hfill
+\normalfont{d. 17.05 2013}
+\vspace{2\onelineskip} \\
+\small
+\textsc{SDU - M\ae rsk McKinney M\o ller inst.}\\
+\end{center}
+\end{titlingpage}
+\settocdepth{subsection}
+%----------------------------------------------------------
+%indholdsfortegnelse
+\tableofcontents*
+
+%-----------------------------------------------------
+\chapter{Introduction}
+\input{1introduction/introduction}
+%----------------------------------------------------
+\chapter{RRT-connect}
+\input{MRRT/MRRT} \label{chapter:rrtconnect}
+%----------------------------------------------------
+\chapter{Implementation of the RRT-connect}
+\input{2RRT/RRT}
+%----------------------------------------------------
+\chapter{Constraint}
+\input{teoriconstraint/teoriconstraint}
+%----------------------------------------------------
+\chapter{Implementation of the Constraint}
+\input{3constraint/constraint}
+%---------------------------------------------------
+
+\chapter{Test Setup}
+\input{4testSetup/testSetup}
+%----------------------------------------------------
+\chapter{Result}
+\input{5Result/result}
+
+%----------------------------------------------------
+
+\chapter{Conclusion}
+\input{6conclusion/conclusion}
+%-----------------------------------------------------
+
+\end{document}

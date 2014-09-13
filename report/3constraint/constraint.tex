@@ -1,0 +1,29 @@
+The Constraint was implemented as a function that were checked together with the path checking in the NEW\_CONFIG function. The implementation is shown in listing \ref{cons} and it starts by checking if q1 is coming from the Qinit Tree. If not it swap q1 and q2. Afterwards it goes through the full path in steps of $\epsilon $(straight forward way) with $\epsilon $ chosen to $\epsilon = 10^{-6}$. For each step it cheeks if the tool is closer to the human center than the previous confutation's tool position and the new configuration is beneath the safety length with was given in the exercise to be $0.75m$. If constraints exist then the function will return false. If not for any of the steps are true, then the EXTEND has none constraints.
+
+\begin{lstlisting}[caption=The implementation of the planner, label=cons]
+bool constraint1(Q q1, Q q2, bool q1isQinit)
+{
+    if(!q1isQinit)
+    {
+        Q qtemp = q1;
+        q1 = q2;
+        q2 = qtemp;
+    }
+    
+    Q dq = q2 -q1;
+    double steps = dq.norm2()/ebs;
+    
+    Q qold = q1;
+    for (int i = 0; i < steps; i++) {
+        Q q = q1 + dq * (i/steps);
+        
+        if( (toolPos(q)-humanCenter).norm2() < (toolPos(qold)-humanCenter).norm2() && (toolPos(q)-humanCenter).norm2() < humanSafeLength)
+            return false;
+        qold = q;
+    }
+    if( (toolPos(q2)-humanCenter).norm2() < (toolPos(qold)-humanCenter).norm2() && (toolPos(q2)-humanCenter).norm2() < humanSafeLength)
+        return false;
+
+	return true;
+}
+\end{lstlisting}

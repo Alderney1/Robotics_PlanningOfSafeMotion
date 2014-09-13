@@ -1,0 +1,21 @@
+\usepackage{tabularx, colortbl}
+\usepackage[table]{xcolor}
+
+\makeatletter
+\renewcommand\fps@table{htbp}
+\makeatother
+
+\renewcommand*\arraystretch{1.25}
+
+\newcolumntype{$}{>{\global\let\currentrowstyle\relax}}
+\newcolumntype{^}{>{\currentrowstyle}}
+\newcommand{\rowstyle}[1]{\gdef\currentrowstyle{#1}#1\ignorespaces}
+
+\newlength{\widetablewidth}
+\addtolength{\widetablewidth}{\textwidth}
+\addtolength{\widetablewidth}{\marginparwidth}
+\addtolength{\widetablewidth}{\marginparsep}
+
+\newcommand{\thr}[1]{\rowcolor{grey}#1\\\toprule}
+\newcommand{\thc}{\rowstyle{\bfseries}}
+\newcommand{\tr}[1]{#1\\}

@@ -1,0 +1,108 @@
+The implementation was made in C++ using liberies found in Robworks 0.6.0. This is done by making a simple implementation of the pseudo code shown in the previous chapter, see chapter \ref{chapter:rrtconnect}. 
+
+\begin{lstlisting}[caption=The implementation of the planner, label=planner]
+vector<Q> RRT_CONNECT_PLANNER(Q qinit, Q qgoal)
+{
+    
+    if( (toolPos(qgoal)-humanCenter).norm2() < (toolPos(qinit)-humanCenter).norm2()
+        &&
+        (toolPos(qgoal) -humanCenter).norm2() < humanSafeLength)
+    {
+        vector<Q> NoRoute;
+        return NoRoute;
+    }
+    
+    Tree treeA(qinit);
+    Tree treeB(qgoal);
+    
+    for(int k = 0; k < K; k++)
+    {
+        Q qran = ranQ();
+        if(EXTEND(treeA, qran, true) != 0)
+        {
+            if (CONNECT(treeB, qran, false)) {
+                return CONSTRUCT_ROUTE(treeA,treeB);
+            }
+        }
+        
+        qran = ranQ();
+        if(EXTEND(treeB, qran, false) != 0)
+        {
+            if (CONNECT(treeA, qran,true)) {
+                return CONSTRUCT_ROUTE(treeA,treeB);
+            }
+        }
+    }
+    
+    vector<Q> NoRoute;
+    return NoRoute;
+}
+	
+\end{lstlisting}
+First the implementation of the planner is shown in \ref{planner}. This shows, how the implementation of the planner is made. It's much similar to the pseudo code but has few differences.
+First of all, if none route was found it returns an empty route as a signal that no route was found. Other than that there was added a variable to the CONNECT function with is an bool that indicate if it's called from the tree made from the qinit. This is needed for the implementation of the constraint. The Tree class is a self implemented and holds a vector of configurations and a vector of integers indicating the parent's position in the configuration vector of the configuration at the same position number as the configuration.  
+
+\begin{lstlisting}[caption=The implementation of the planner, label=EXTEND]
+int EXTEND(Tree & tree, Q & q, bool fromQinit)
+{
+    int pQnear = tree.qQnear(q);
+    Q qnear = tree.getQ(pQnear);
+    Q qnew;
+    if( NEW_CONFIG(q, qnear, qnew, fromQinit) )
+    {
+        tree.addNode(qnew, pQnear);
+        
+        if(qnew == q)
+        {
+            return 1;
+        }
+        else
+        {
+            q = qnew;
+            return 2;
+        }
+    }
+    
+    return 0;
+}
+\end{lstlisting}
+
+The EXTEND function is implemented as shown in figure \ref{EXTEND}. The return value of this is chosen as an integer in a range from [0,2].
+\begin{itemize}
+\item "0" is defined as "TRAPPED" with means that it can't be extended because the path between the two configurations is in collision or constraint restricted.
+\item "1" is defined as "REACHED" with means the configuration is reached.
+\item "2" means "ADVANCED" with means the configuration is further away from the predefined max step distance. A step towards that point was made with the size of $\epsilon$ .
+\end{itemize}
+
+\begin{lstlisting}[caption=The implementation of the planner, label=CONNECT]
+bool CONNECT(Tree & tree, Q & q, bool fromQinit)
+{
+    int S = 2;
+    while (S == 2) {
+        Q qend = q;
+        S = EXTEND(tree, qend,fromQinit);
+    }
+    if(S == 1) return true;
+    return false;
+}
+\end{lstlisting}
+
+The implementation of the CONNECT shown in listing \ref{CONNECT} is using the defined return integers values in the range [0,2] from the EXTEND method. If "ADVANCED" is returned from the EXTEND method, the while loop will continue to taking a step further to the point. Until the point is reached then the CONNECT method returns true. CONNECT method returns false if it can't be reached directly.
+
+\begin{lstlisting}[caption=The implementation of the planner, label=CONFIG]
+bool NEW_CONFIG(Q & q, Q & qnear, Q & qnew, bool fromQinit)
+{
+    Q dq = q - qnear;
+    if(dq.norm2() > ebsi)
+        qnew = qnear + dq*(ebsi/dq.norm2());
+    else
+        qnew = q;
+    
+    if(inCol(qnew)) return false;
+    if (expandedBinarySearch(qnear, qnew) && constraint1(qnear, qnew, fromQinit)) return true;
+    
+    return false;
+}
+\end{lstlisting}
+
+The $NEW\_CONFIG$ shown in listing \ref{CONFIG} is the function that validates the the extended point(configuration) and the path between. The constraint validation is included in this function. The constraint will be checking the path from the parent configuration in the tree to the extended configuration. if this returns false the configurations aren't possible to be made due to the constraints. Here we can also see that the bool $"fromQinit"$ is used in the constraint. It's important to know where the extending is taking place from the $Qinit$ or the $Qgoal$.

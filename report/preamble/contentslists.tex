@@ -1,0 +1,44 @@
+\newcommand{\printcontents}{
+	\cleardoublepage
+	\pdfbookmark[0]{\contentsname}{contentslist}
+	\tableofcontents*
+	\cleardoublepage
+}
+
+\newcommand{\printlistof}{
+	\listoffigures
+	\listoftables
+	\listoflistings
+}
+
+\makeatletter
+\newlength{\partskip}
+\setlength{\partskip}{0em}
+\addtolength{\partskip}{\cftbeforepartskip}
+\addtolength{\partskip}{-\cftbeforechapterskip}
+
+\newcommand{\partbegin}{
+	\def\toclevel@chapter{0}\def\toclevel@section{1}\def\toclevel@subsection{2}
+}
+\newcommand{\partend}{
+	\def\toclevel@chapter{-1}\def\toclevel@section{0}\def\toclevel@subsection{1}
+	\addtocontents{toc}{\protect\addvspace{\partskip}}
+}
+\makeatother
+
+% style
+
+\makeatletter
+\renewcommand\cftpartname{\color{blue}\partname~}
+\renewcommand\cftchaptername{\color{green}\chaptername~}
+\renewcommand\cftappendixname{\color{green}\appendixname~}
+
+\renewcommand{\cftpartfont}{\large\bfseries\color{blue}}
+\renewcommand{\cftpartaftersnum}{\enskip}
+\renewcommand{\cftpartaftersnumb}{{\color{grey}\vline width 0.25em}\enskip}
+
+\renewcommand{\cftchapterfont}{\bfseries\color{blue}}
+\renewcommand{\cftchapterpresnum}{\color{green}}
+\renewcommand{\cftchapteraftersnum}{\enskip}
+\renewcommand{\cftchapteraftersnumb}{{\color{grey}\vline width 0.25em}\enskip}
+\makeatother

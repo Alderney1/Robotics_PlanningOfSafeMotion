@@ -1,0 +1,56 @@
+\usepackage{listings}
+
+%\lstset{
+%	language=c,
+%	float
+%}
+
+\newfloat[chapter]{listing}{lol}{\listingname}
+
+\makeatletter
+\renewcommand\fps@listing{htbp}
+\makeatother
+
+% contents list
+
+%\lstset{
+%	nolol=true
+%}
+
+\newcommand{\listingname}{Listing}
+\newcommand{\listlistingname}{List of Listings}
+\newlistof{listoflistings}{lol}{\listlistingname}
+\newlistentry{listing}{lol}{0}
+\addtodef*{\insertchapterspace}{}{\addtocontents{lol}{\protect\addvspace{10pt}}}
+\makeatletter
+\addtoiargdef*{\bbl@set@language}{}{\addtocontents{lol}{\xstring\select@language{\languagename}}}
+\makeatother
+
+\addto\captionsdanish{
+	\renewcommand{\listingname}{Kildekode}
+	\renewcommand{\listlistingname}{Kildekoder}
+}
+
+% style
+
+\newlength{\linenumberindent}
+\settowidth{\linenumberindent}{\tiny 9999}
+\lstset{
+	frame=tb,
+	language=C++,
+	rulecolor=\color{blue},
+	xleftmargin=\linenumberindent,
+	abovecaptionskip=0em,
+	belowcaptionskip=0em,
+	numbers=left,
+	numberstyle=\tiny,
+	tabsize=2,
+	extendedchars=true,
+	breaklines=true,
+	showstringspaces=false,
+	basicstyle=\small\ttfamily,
+	keywordstyle=\bfseries\color{green},
+	identifierstyle=\color{blue},
+	stringstyle=\color{green},
+	commentstyle=\itshape
+}

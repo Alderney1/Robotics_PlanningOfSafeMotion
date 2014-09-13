@@ -1,0 +1,18 @@
+The first goal for testing was validating that the RRT-connect and the constraint was working as intended. For this purpose a fixed Qinit and Qgoal configuration were used, which are listed below.
+\begin{align}
+Q_{init} &= (-1.5,-1,1,0,0,0)^{T}  \\
+Q_{goal} &=(-2,-0.5,1,-1.8,0,0)^{T}
+\end{align}
+For this it's known that $Q_{init}$ is inside the constraint radius and the $Q_{goal}$ is outside so it should be possible to find a path and the path is for filling the constraint. This was done by plotting the distance from the tool to the human center in the found path. \\ 
+Other than that the overall performance of the algorithm wanted to be testes so by randomly choosing valid $Q_{init}$ and $Q_{goal}$ pairs, by valid means that these two configurations isn't directly in conflict with the constraint and collisions. A histogram of the average number of nodes in the path should then be calculated. \\
+Last a histogram of the number of times the main loop is running before a solution was found was calculated to find out how many times really is enough and when we can stop and conclude that there probertly will not be found a solution.
+
+\section{Parameter}
+In the algorithm, three parameters were used as shown below. These were chosen based on tests to optimize the speed of the algorithm without making any invalid paths. 
+\begin{align}
+ \epsilon _{collision checking} &= 0.01  \\
+ \epsilon _{node jump} &= 0.5 \\
+	K &= 50 
+\end{align}
+
+ $\epsilon _{collision checking}$ is the distance of testpoints in the different edges to be validated in configuration space. $\epsilon _{node jump}$ is the max distance between each node in configuration space. K is the max number of times the $RRT\_ CONNECT\_ PLANNER$ will run through before it return a empty path, and was validated as a good number using the result in the result section figure \ref{fig:k}.

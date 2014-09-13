@@ -1,0 +1,27 @@
+The classical rapidly exploring random tree (RRT) is a powerful and efficient algorithm designed to search in high dimensional spaces. In this way it quickly exploring new unknown areas and it's incrementally. The tree expand by add a new vertex randomly and then extend to the nearest vertex.
+There also exist a modification of RRT to improve the convergence between to vertices, let denote them q\_{ini}t and q\_{goal}. This algorithm is named RRT-connect.
+Here will be a brief introduction of RRT-connect. The original scientific paper can be found in "project3\_ PlanningOfSafeMotion/paper/rrtconnect.pdf.
+The RRT-connect is selected because it is powerful designed to solve planning problems. RRT-connect is based on two concepts: RRT concept for both trees $q_{init}$ and $q_goal$, and connect heuristic. Purpose with this heuristic is to give the planner a more greedy performance. Unlike the RRT extend, the RRT-connect iterates the EXTEND operation until an obstacle or q are hit or reached. This way it rapid convergence to a solution. Thus one tree EXTEND normally in the nature of the RRT, then the second tree applied this heuristic connect to connect nearest vertex to new extended vertex at the first tree. If the connect operation fails, which means that the planner hasn't found a path between $q_{init}$ and $q_{goal}$. Then these two trees are swapping roles.
+The pseudo code of the connect is shown in listing \ref{listing:rrtconnectpseudo1} and pseudo code for RRT-CONNECT shown in listing \ref{listing:rrtconnectpseudo2}.
+
+\begin{lstlisting}[caption=Peseudo code of the CONNECT, label=listing:rrtconnectpseudo1]
+CONNECT(T, q) 
+	repeat
+		S <- EXTEND(T , q);
+	until not (S = Advanced)
+Return S;
+\end{lstlisting}
+
+\begin{lstlisting}[caption=Peseudo code of the RRT-Connect algorithm, label=listing:rrtconnectpseudo2]
+RRT CONNECT PLANNER(qinit , qgoal)
+	Ta.init(qinit ); Tb.init(qgoal);
+	for k = 1 to K do
+		qrand <- RANDOM CONFIG();
+		if not (EXTEND(Ta , qrand ) =Trapped) then
+			if (CONNECT(Tb , qnew ) =Reached) then
+				Return PATH(Ta , Tb );
+		SWAP(Ta , Tb );
+Return Failure
+\end{lstlisting}
+
+To explain those pseudo codes, lets look at listing \ref{listing:rrtconnectpseudo2}. Both trees Ta and Tb will be initialized. Number of runs depends of K. In the loop a collisionfree configuration will be generated, denoted qrand. EXTEND method will be called, and it has three possible return results, "Trapped", "Advanced" and "Reached" respectively. If the EXTEND is "Trapped" it means that a collision or constraint have occurred, then it will not enter the "if not condition". If instead it has "Reached" the qrand or "Advanced" meaning that none collisions and constraints have occurred in a fixed distance against qrand. Thus CONNECT is called with the second tree and qnew as the extended vertex from the first tree to be a parameter. Listing \ref{listing:rrtconnectpseudo1} present CONNECT. Here EXTEND will be repeated until EXTEND returns either "Trapped" or "Reached". "Advance" meaning that no collisions and constraints exist. If CONNECT return state is "Reached" a path exist which will be returned. If the state instead show to be "Trapped" then Ta and Tb will swap, and it will continue from the start until K is reach or the path is found.

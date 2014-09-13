@@ -1,0 +1,34 @@
+\makepagestyle{bing}
+\makerunningwidth{bing}{\paperwidth}
+\makeevenhead{bing}{
+	\begin{tabular}{m{\marginparwidth} | l}
+		\cellcolor{blue}\raggedleft{\bfseries\color{white} \thepage} & \cellcolor{grey}\leftmark
+	\end{tabular}
+}{}{}
+\makeoddhead{bing}{}{}{
+	\begin{tabular}{r | m{\marginparwidth} p{\oddsidemargin}}
+		\cellcolor{grey}\raggedleft\rightmark & \cellcolor{blue}{\bfseries\color{white} \thepage} &
+	\end{tabular}
+}
+\makepsmarks{bing}{
+	\def\chaptermark##1{\markboth{{\bfseries\color{green} \chaptername\ \thechapter} \enskip | \enskip ##1}{}}
+	\def\sectionmark##1{\markright{{\bfseries\color{green} \sectionname\ \thesection} \enskip | \enskip ##1}}
+	\def\subsectionmark##1{\markright{##1}}
+	\def\tocmark{\markboth{\contentsname}{\contentsname}}
+	\def\lofmark{\markboth{\listfigurename}{\listfigurename}}
+	\def\lotmark{\markboth{\listtablename}{\listtablename}}
+	\def\bibmark{\markboth{\bibname}{\bibname}}
+	\def\indexmark{\markboth{\indexname}{\indexname}}
+	\def\glossarymark{\markboth{\glossaryname}{\glossaryname}}
+}
+\pagestyle{bing}
+
+\makepagestyle{bing_chapter}
+\makerunningwidth{bing_chapter}{\paperwidth}
+\makeoddfoot{bing_chapter}{}{}{
+	\begin{tabular}{m{\marginparwidth} p{\oddsidemargin}}
+		\bfseries\color{blue} \thepage &
+	\end{tabular}
+}
+\aliaspagestyle{chapter}{bing_chapter}
+\aliaspagestyle{part}{bing_chapter}
