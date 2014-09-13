@@ -22,19 +22,6 @@
 *.a
 *.lib
 
-#Latex
-*.log
-*.acn
-*.aux
-*.glo
-*.idx
-*.ist
-*~
-*.gz
-*.pdf
-*.toc
-*.sbl
-*.out
 # Executables
 *.exe
 *.out
